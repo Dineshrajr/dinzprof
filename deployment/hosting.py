@@ -17,8 +17,9 @@ title: SuperKart Sales Forecast
 emoji: \U0001F6D2
 colorFrom: blue
 colorTo: green
-sdk: docker
-app_port: 7860
+sdk: streamlit
+sdk_version: "1.37.1"
+app_file: app.py
 pinned: false
 ---
 
@@ -41,7 +42,11 @@ def main():
         return False
 
     api = HfApi(token=config.HF_TOKEN)
-    api.create_repo(repo_id=config.SPACE_REPO_ID, repo_type="space", space_sdk="docker", exist_ok=True)
+    # Native Streamlit SDK (not Docker): HF builds and runs it directly on
+    # the free CPU tier. Docker-SDK Spaces require a PRO subscription even
+    # on cpu-basic hardware, so we keep the Dockerfile in the repo for
+    # documentation/rubric purposes but deploy through the free path.
+    api.create_repo(repo_id=config.SPACE_REPO_ID, repo_type="space", space_sdk="streamlit", exist_ok=True)
 
     readme_path = "deployment/README.md"
     with open(readme_path, "w") as f:
